@@ -1,0 +1,132 @@
+<div class="container">
+    <div class="row mt-5">
+        <h1 class="text-center">Users Data</h1>
+        <hr>
+        <div class="col text-end mb-3">
+            <button class="me-5" mat-raised-button color="primary" routerLink="/adduser">Add User</button>
+            <button mat-raised-button color="warn" (click)="logout()">Logout</button>
+        </div>
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th scope="col">User Id</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of userdata">
+                            <td>{{user.id}}</td>
+                            <td>{{user.username}}</td>
+                            <td>{{user.email}}</td>
+                            <td>
+                                <button mat-mini-fab matTooltip="Edit" color="primary" class="me-3"
+                                    (click)="getDetails(user)" data-bs-toggle="modal" data-bs-target="#editModal">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-mini-fab matTooltip="Details" color="accent" class="me-3"
+                                    (click)="viewDetails(user.id)" data-bs-toggle="modal" data-bs-target="#detailModal">
+                                    <mat-icon>info</mat-icon>
+                                </button>
+                                <button mat-mini-fab matTooltip="Delete" color="warn" (click)="deleteUser(user.id)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Edit modal-->
+<div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="staticBackdropLabel">Edit User</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="EditForm" novalidate class="text-center">
+                    <div class="form-group mb-3" hidden>
+                        <mat-form-field appearance="outline" class="example-full-width">
+                            <mat-label>User ID</mat-label>
+                            <input type="text" matInput formControlName="id" readonly>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <mat-form-field appearance="outline" class="example-full-width">
+                            <mat-label>Username</mat-label>
+                            <input type="text" matInput placeholder="Your Name" formControlName="username"
+                                [ngClass]="{'is-invalid':username.errors && (username.touched || username.dirty)}" />
+                            <mat-error *ngIf="username.errors?.required">Required Field</mat-error>
+                            <mat-error *ngIf="username.errors?.minLength">Name must contain atleast 4
+                                characters</mat-error>
+                            <mat-error *ngIf="username.errors?.pattern">Enter a valid Username</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <mat-form-field appearance="outline" class="example-full-width">
+                            <mat-label>Email</mat-label>
+                            <input type="email" matInput placeholder="Your Email" formControlName="email"
+                                [ngClass]="{'is-invalid':email.errors && (email.touched || email.dirty)}" />
+                            <mat-error *ngIf="email.errors?.required">Required Field</mat-error>
+                            <mat-error *ngIf="email.errors?.pattern">Email must be Valid</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group mb-4" hidden>
+                        <mat-form-field appearance="outline" class="example-full-width">
+                            <mat-label>Password</mat-label>
+                            <input type="password" matInput [type]="hide ? 'password' : 'text'"
+                                placeholder="Your Password" formControlName="password"
+                                [ngClass]="{'is-invalid':password.errors && (password.touched || password.dirty)}"
+                                readonly />
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="password.errors?.required">Required Field</mat-error>
+                            <mat-error *ngIf="password.errors?.pattern">Password must be Valid</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-group text-center">
+                        <button mat-raised-button color="primary" (click)="EditUser(EditForm.value.id)"
+                            data-bs-dismiss="modal">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--detail modal-->
+<div class="modal fade" id="detailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="staticBackdropLabel">User Details</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div *ngFor="let det of detail">
+                    <h3>User ID : <strong>{{det.id}}</strong></h3>
+                    <h3>Username : <strong>{{det.username}}</strong></h3>
+                    <h3>User email : <strong>{{det.email}}</strong></h3>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button mat-raised-button color="warn" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

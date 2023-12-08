@@ -1,0 +1,35 @@
+.example-full-width {
+    width: 80%;
+}
+
+.row {
+    border: 1px solid grey;
+    border-radius: 10px;
+    width: 70%;
+    margin: 6em auto 0 auto;
+}
+
+#side1 {
+    border-right: 1px solid grey;
+}
+
+@media (max-width:767px) {
+    .row {
+        width: 100%;
+    }
+
+    #side1 {
+        border-right: none;
+    }
+
+    .example-full-width {
+        width: 80%;
+    }
+}
+
+@media screen and (min-width:768px) and (max-width:1024px) {
+    .row {
+        width: 85%;
+    }
+
+}
